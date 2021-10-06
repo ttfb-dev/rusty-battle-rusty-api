@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+export $(cat ./build/.env.base)
+
+export COMPOSE_FILE=docker-compose.yml
+export COMPOSE_PROJECT_NAME=rusty-api
+
+docker-compose pull
+
+#docker-compose run --rm php-fpm php artisan do:mi:mi --no-interaction --force
+docker-compose up -d --force-recreate --remove-orphans

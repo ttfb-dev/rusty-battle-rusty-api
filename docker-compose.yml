@@ -1,0 +1,31 @@
+version: '3.6'
+
+networks:
+  default:
+    external:
+      name: network
+
+services:
+  nginx:
+    container_name: rusty-api-nginx
+    build:
+      context: ./
+      dockerfile: build/nginx/Dockerfile
+    image: registry.gitlab.com/robots-miniapp/rusty-api:nginx
+    restart: 'always'
+    env_file: ./build/.env.list
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    container_name: rusty-api-php-fpm
+    image: registry.gitlab.com/robots-miniapp/rusty-api:php-fpm
+    build:
+      context: ./
+      dockerfile: build/php-fpm/Dockerfile
+    restart: 'always'
+    env_file: ./build/.env.list
+    volumes:
+    - /var/data/rusty-api/php-fpm/storage/framework/cache:/var/www/rusty-api/storage/framework/cache
+    - /var/data/rusty-api/php-fpm/storage/framework/sessions:/var/www/rusty-api/storage/framework/sessions
+    - /var/data/rusty-api/php-fpm/storage/framework/views:/var/www/rusty-api/storage/framework/views

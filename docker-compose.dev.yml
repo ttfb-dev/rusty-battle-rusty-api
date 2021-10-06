@@ -1,0 +1,31 @@
+version: '3.6'
+
+networks:
+  default:
+    external:
+      name: ttfb
+
+volumes:
+  dbdata:
+
+services:
+  nginx:
+    restart: 'no'
+    networks:
+      default:
+        aliases:
+          - rusty-api
+    volumes:
+      - $PWD/public:/var/www/rusty-api/public
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.rusty-api.rule=Host(`rusty-api.lc`)
+      - traefik.http.routers.rusty-api.entrypoints=web
+
+  php-fpm:
+    restart: 'no'
+    volumes:
+      - $PWD/:/var/www/rusty-api
+      - $PWD/storage/framework/cache:/var/www/rusty-api/storage/framework/cache
+      - $PWD/storage/framework/sessions:/var/www/rusty-api/storage/framework/sessions
+      - $PWD/storage/framework/views:/var/www/rusty-api/storage/framework/views

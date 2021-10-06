@@ -1,0 +1,24 @@
+stages:
+  - production
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+
+build_images:
+  image: docker:latest
+  stage: production
+  only:
+    - master
+  script:
+    - export DB_HOST=$CI_PROD_DB_HOST
+    - export DB_SSL=require
+    - export DB_PORT=$CI_PROD_DB_PORT
+    - export DB_DATABASE=$CI_PROD_DB_DATABASE
+    - export DB_USERNAME=$CI_PROD_DB_USERNAME
+    - export DB_PASSWORD=$CI_PROD_DB_PASSWORD
+    - export APP_KEY=$CI_APP_KEY
+    - ./build/run-build
+    - ./build/run
+  tags:
+    - production

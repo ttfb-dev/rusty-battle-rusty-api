@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
+export $(cat ./build/.env.base)
+
+export COMPOSE_FILE=docker-compose.yml
+export COMPOSE_PROJECT_NAME=rusty-api
+
+docker-compose build
+docker-compose push
