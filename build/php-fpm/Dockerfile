@@ -4,6 +4,7 @@ COPY build/php-fpm/php.ini /usr/local/etc/php/php.ini
 
 COPY composer.json /var/www/rusty-api/composer.json
 COPY composer.lock /var/www/rusty-api/composer.lock
+COPY game-balance.config.yaml /var/www/rusty-api/game-balance.config.yaml
 COPY app /var/www/rusty-api/app
 COPY bootstrap /var/www/rusty-api/bootstrap
 COPY database /var/www/rusty-api/database
