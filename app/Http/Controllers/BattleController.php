@@ -98,7 +98,7 @@ class BattleController extends Controller
 
         $robot = $robotsService->load($member, $battle_id);
 
-        return response()->json($robot->toArray());
+        return response()->json($robot->toApiArray());
     }
 
     public function finishArming(int $battle_id, Request $request, BattleService $battleService, RobotsService $robotsService) {
