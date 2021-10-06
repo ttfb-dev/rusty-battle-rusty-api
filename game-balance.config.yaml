@@ -8,7 +8,7 @@ module:
     name: Молот
     damage: 5
     energyCoast: 4
-    limit: 20
+    limit: 2
     slots:
       - hand_l
       - hand_r
@@ -17,7 +17,7 @@ module:
     description: Наносит удар сквозь щит
     damage: 1
     energyCoast: 2
-    limit: 20
+    limit: 2
     slots:
       - hand_l
       - hand_r
@@ -34,7 +34,7 @@ module:
     name: Энергоячейка
     description: Пассивно увеличивает энергию на 4
     energyBonus: 4
-    limit: 20
+    limit: 2
     slots:
       - core
     passive: true
