@@ -140,6 +140,7 @@ class BattleController extends Controller
         $fightRoundService->processActions($fightRound, $battle);
         $fightRoundService->finish($fightRound, $battle);
 
+        $winner = '';
         if (count($battle->getWinners())) {
             $winner = $battle->getWinners()[0]->getOwner() === Member::MEMBER_VK ? 'user' : 'core';
         }
@@ -147,7 +148,7 @@ class BattleController extends Controller
         return response()->json([
             'log' => FightLog::read(),
             'status' => $battle->getStatus(),
-            'winner' => $winner ?? '',
+            'winner' => $winner,
         ]);
     }
 }
