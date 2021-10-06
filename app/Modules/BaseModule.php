@@ -216,6 +216,7 @@ class BaseModule
             'status' => '',
             'image' => '',
             'slot' => $this->getSlot(),
+            'slots' => $this->getSlots(),
         ];
     }
 }
