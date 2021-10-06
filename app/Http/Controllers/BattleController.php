@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\BaseAction;
 use App\Domains\Member;
 use App\Modules\ModulesCollection;
 use App\Services\ArmingRoundService;
@@ -14,10 +13,8 @@ use Illuminate\Http\Request;
 
 class BattleController extends Controller
 {
-    public function dev(Request $request, RobotsService $robotsService, ArmingRoundService $armingRoundService, BattleService $battleService, FightRoundService $fightRoundService) {
-        $battle = $battleService->load(1);
-        $fightRound = $fightRoundService->create(1);
-        $fightRoundService->activateCoreModules($fightRound, $battle);
+    public function dev() {
+
     }
 
     public function create(Request $request, BattleService $battleService) {
@@ -33,6 +30,7 @@ class BattleController extends Controller
 
         return response()->json([
             'battle_id' => $battle->model->id,
+            'status' => $battle->getStatus(),
         ]);
     }
 
@@ -52,7 +50,7 @@ class BattleController extends Controller
         }
 
         return response()->json([
-            'modules' => ModulesCollection::toArrays($round->getProposedUserModules($user_id)),
+            'modules' => ModulesCollection::toApiArrays($round->getProposedUserModules($user_id)),
             'round_number' => $round->round_number,
         ]);
     }
@@ -124,7 +122,7 @@ class BattleController extends Controller
 
         $robot = $robotsService->load($core_member, $battle_id);
 
-        return response()->json($robot->toArray());
+        return response()->json($robot->toApiArray());
     }
 
     public function fightRound(int $battle_id, Request $request, BattleService $battleService, RobotsService $robotsService, FightRoundService $fightRoundService) {
@@ -141,13 +139,15 @@ class BattleController extends Controller
         $fightRoundService->setFightActions($userModules, $coreModules, $fightRound, $battle, $member);
         $fightRoundService->processActions($fightRound, $battle);
         $fightRoundService->finish($fightRound, $battle);
+
+        if (count($battle->getWinners())) {
+            $winner = $battle->getWinners()[0]->getOwner() === Member::MEMBER_VK ? 'user' : 'core';
+        }
+
         return response()->json([
-            'status' => 'ok',
             'log' => FightLog::read(),
-            'battle' => [
-                'status' => $battle->getStatus(),
-                'winners' => array_map(function (Member $member) { return $member->toArray(); }, $battle->getWinners()),
-            ]
+            'status' => $battle->getStatus(),
+            'winner' => $winner,
         ]);
     }
 }

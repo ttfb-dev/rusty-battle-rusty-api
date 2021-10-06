@@ -203,4 +203,19 @@ class BaseModule
             'effects' => $this->getEffects(),
         ];
     }
+
+    public function toApi() {
+        return [
+            'id' => $this->getCode(),
+            'title' => $this->getName(),
+            'description' => $this->getDescription(),
+            'energy' => $this->getEnergyCoast(),
+            'health_add' => $this->getHealthBonus(),
+            'damage' => $this->getDamage(),
+            'energy_add' => $this->getEnergyBonus(),
+            'status' => '',
+            'image' => '',
+            'slot' => $this->getSlot(),
+        ];
+    }
 }

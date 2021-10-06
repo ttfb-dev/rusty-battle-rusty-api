@@ -162,4 +162,23 @@ abstract class BaseRobot
             'modules' => array_values(ModulesCollection::toArrays($this->getModules())),
         ];
     }
+
+    public function toApiArray() {
+        return [
+            'specifications' => [
+                'health' => [
+                    'total' => $this->model->health_max,
+                    'base' => $this->model->health_base,
+                    'value' => $this->model->health,
+                ],
+                'energy' => [
+                    'total' => $this->model->energy_max,
+                    'base' => $this->model->energy_base,
+                    'value' => $this->model->energy,
+                ],
+            ],
+            'status' => $this->model->status,
+            'modules' => array_values(ModulesCollection::toApiArrays($this->getModules())),
+        ];
+    }
 }

@@ -109,6 +109,11 @@ class ModulesCollection
         return array_map(function ($module) { return $module->toArray();}, $modules);
     }
 
+    /** @param BaseModule[] $modules */
+    public static function toApiArrays(array $modules): array {
+        return array_map(function ($module) { return $module->toApi();}, $modules);
+    }
+
     /**
      * @param BaseModule[] $modules
      * @param BaseModule[] $modules_to_exclude
