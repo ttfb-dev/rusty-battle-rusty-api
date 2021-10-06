@@ -58,16 +58,16 @@ class BattleController extends Controller
     public function chooseModuleInArmingRound(int $battle_id, Request $request, ArmingRoundService $armingRoundService, RobotsService $robotsService) {
         $user_id = $request->get('user_id');
         $source = $request->get('source');
-        $module = $request->get('module', '');
-        $slot = $request->get('slot', '');
+        $module = $request->get('module');
+        $slot = $request->get('slot');
 
         $member = (new Member($source))->setOwnerId($user_id);
 
         $armingRound = $armingRoundService->getCurrent($battle_id);
 
-        $module_to_select = ModulesCollection::createFromCode($module);
+        if (!empty($module)) {
 
-        if ($module_to_select) {
+            $module_to_select = ModulesCollection::createFromCode($module);
 
             throw_if(!in_array($slot, $module_to_select->getSlots()), new \Exception('Нельзя установить модуль в этот слот'));
 
