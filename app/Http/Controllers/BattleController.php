@@ -147,7 +147,7 @@ class BattleController extends Controller
         return response()->json([
             'log' => FightLog::read(),
             'status' => $battle->getStatus(),
-            'winner' => $winner,
+            'winner' => $winner ?? '',
         ]);
     }
 }
