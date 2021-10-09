@@ -5,7 +5,7 @@ use App\Services\ConfigService;
 class BattleApiTest extends TestCase
 {
     private $battle_id = 1;
-    private $arming_rounds = 4;
+    private $arming_rounds = 5;
     private $user_id = 1850436;
 
     public function test_a_battle()
@@ -33,7 +33,6 @@ class BattleApiTest extends TestCase
             }
             $response_post = $this->call('POST', "/v1/battle/{$this->battle_id}/arming-round?disable_analytics=1&source=vk&user_id={$this->user_id}", ['module' => $module_name, 'slot' => $slot]);
             $resp = json_decode($response_post->content(), true);
-            $this->assertEquals('ok', $resp['status']);
             $this->assertEquals(200, $response_post->status());
         }
     }
@@ -64,7 +63,6 @@ class BattleApiTest extends TestCase
     {
         $response = $this->call('POST', "/v1/battle/{$this->battle_id}/finish-arming?disable_analytics=1&source=vk&user_id={$this->user_id}");
         $data = json_decode($response->content(), true);
-        $this->assertEquals('ok', $data['status']);
         $this->assertEquals(200, $response->status());
     }
 

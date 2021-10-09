@@ -9,6 +9,7 @@ use App\Battle\Modules\BaseModule;
 use App\Battle\Factories\ModulesFactory;
 use App\Services\ConfigService;
 use App\Traits\CodeTrait;
+use Illuminate\Support\Facades\Log;
 
 abstract class BaseRobot
 {
@@ -207,20 +208,18 @@ abstract class BaseRobot
 
         $energy_interval = ConfigService::getGeneral('core_use_energy_on_modules_in_percents', ['min' => 50, 'max' => 75]);
 
-        $energy_min = round($energy * ($energy_interval['min'] / 100));
-        $energy_max = round($energy * ($energy_interval['max'] / 100));
-        $energy_on_modules = rand($energy_min, $energy_max);
-        $energy_used = 0;
+        $energy_min = round($energy * ($energy_interval['min'] / 100), 1);
+        $energy_max = round($energy * ($energy_interval['max'] / 100), 1);
+
+        $energy_on_modules = (int)round(rand($energy_min, $energy_max));
 
         foreach ($modules as $module) {
             if ($module->isPassive()) {
                 continue;
             }
-            if ($module->getEnergyCoast() <= $energy_on_modules) {
-                $energy_on_modules -= $module->getEnergyCoast();
+            if ($energy_on_modules >= $module->getEnergyCoast()) {
                 $activating_modules []= $module;
-                $this->useEnergy($module->getEnergyCoast());
-                $energy_used += $module->getEnergyCoast();
+                $energy_on_modules -= $module->getEnergyCoast();
             }
         }
 
