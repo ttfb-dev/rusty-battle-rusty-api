@@ -7,6 +7,7 @@ namespace App\Battle\Actions;
 use App\Battle\Battle;
 use App\Battle\FightRound;
 use App\Services\FightLog;
+use Illuminate\Support\Facades\Log;
 
 class BlockRandomMdlAction extends BaseAction
 {
@@ -19,7 +20,11 @@ class BlockRandomMdlAction extends BaseAction
     public function handle(Battle $battle, FightRound $fightRound): bool
     {
         $modules = $fightRound->getModules();
+
+        Log::debug('modules', [$modules]);
         $target_modules = $modules[$this->target->toString()];
+
+        Log::debug('target modules', [$this->target, $target_modules]);
 
         if (count($target_modules) === 0) {
             return true;
