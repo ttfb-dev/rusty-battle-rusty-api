@@ -80,7 +80,7 @@ class Battle
     public function deleteStartedArmingRounds() {
         foreach ($this->arming_rounds as $index => $arming_round) {
             if ($arming_round->getStatus() === ArmingRound::STATUS_STARTED) {
-                unset($this->arming_rounds);
+                unset($this->arming_rounds[$index]);
                 $this->arming_rounds = array_values($this->arming_rounds);
             }
         }
