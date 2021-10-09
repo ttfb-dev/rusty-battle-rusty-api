@@ -9,6 +9,7 @@ use App\Battle\Member;
 use App\Services\FightLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BattleController extends Controller
 {
@@ -34,6 +35,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
 
@@ -70,6 +72,7 @@ class BattleController extends Controller
                 DB::commit();
             }
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
 
@@ -116,6 +119,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
 
@@ -154,10 +158,11 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
 
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => $battle->getStatus()]);
     }
 
     public function getCoreRobot(int $battle_id) {
@@ -202,6 +207,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
 
