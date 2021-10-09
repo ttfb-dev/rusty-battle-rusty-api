@@ -102,9 +102,19 @@ class FightRound
     }
 
     public function processActions(Battle $battle) {
-        $robots = $battle->getRobots();
-        foreach ($robots as $robot) {
-            FightLog::write("Робот {$robot->getMemberOwner()} начинает битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+        $members = $battle->getMembers();
+        foreach ($members as $member) {
+            $modules = $this->getMemberModules($member);
+            $robot = $battle->getMemberRobot($member);
+            if (count($modules) === 0) {
+                FightLog::write("Робот {$robot->getMemberOwner()} не стал активировать модули и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+            }
+            $names_arr = [];
+            foreach ($modules as $module) {
+                $names_arr []= $module->getName();
+            }
+            $names = implode(', ', $names_arr);
+            FightLog::write("Робот {$robot->getMemberOwner()} активировал модули: {$names} и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
         }
         $current_round_number = $this->getRoundNumber();
         $delayed_actions = [];
