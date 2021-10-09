@@ -45,8 +45,10 @@ abstract class BaseRobot
     {
         $this->health_base = ConfigService::getRobotBaseHealth($this->getMemberOwner());
         $this->health = $this->health_base;
+        $this->health_max = $this->health_base;
         $this->energy_base = ConfigService::getRobotBaseEnergy($this->getMemberOwner());
         $this->energy = $this->energy_base;
+        $this->energy_max = $this->energy_base;
     }
 
     abstract function addModule(BaseModule $module, string $slot);
