@@ -17,4 +17,8 @@ class FightLog
     public static function read(): array {
         return self::$log;
     }
+
+    public static function clear() {
+        self::$log = [];
+    }
 }

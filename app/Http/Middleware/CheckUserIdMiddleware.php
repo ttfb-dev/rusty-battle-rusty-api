@@ -3,8 +3,6 @@
 
 namespace App\Http\Middleware;
 
-
-use App\Domains\Member;
 use Closure;
 
 class CheckUserIdMiddleware

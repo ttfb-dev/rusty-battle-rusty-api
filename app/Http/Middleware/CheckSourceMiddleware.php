@@ -4,7 +4,7 @@
 namespace App\Http\Middleware;
 
 
-use App\Domains\Member;
+use App\Battle\Member;
 use Closure;
 
 class CheckSourceMiddleware

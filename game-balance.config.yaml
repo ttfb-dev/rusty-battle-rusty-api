@@ -2,13 +2,45 @@ module:
   garbage:
     name: Мусор
     description: Чего только не встретишь на свалке
-    limit: 10
+    limit: 4
+
+
+  laser:
+    name: Лазер
+    description: Наносит урон
+    damage: 1
+    energyCoast: 2
+    limit: 3
+    slots:
+      - head
+  aim:
+    name: Прицел
+    description: Увеличивает на 1 первую атаку по врагу
+    energyCoast: 3
+    limit: 3
+    slots:
+      - head
+  barrier:
+    name: Барьер
+    description: Увеличивает оставшуюся после активации модулей энергию в 2 раза
+    energyCoast: 3
+    limit: 3
+    slots:
+      - head
+  sonicboom:
+    name: Звуковой удар
+    description: Увеличивает цену активации модулей врага на 1 на следующий ход
+    energyCoast: 3
+    limit: 3
+    slots:
+      - head
+
 
   hammer:
     name: Молот
     damage: 5
     energyCoast: 4
-    limit: 2
+    limit: 3
     slots:
       - hand_l
       - hand_r
@@ -17,6 +49,58 @@ module:
     description: Наносит удар сквозь щит
     damage: 1
     energyCoast: 2
+    limit: 3
+    slots:
+      - hand_l
+      - hand_r
+  flamethrower:
+    name: Огнемёт
+    description: Наносит периодический урон (3 хода)
+    damage: 1
+    energyCoast: 3
+    limit: 3
+    slots:
+      - hand_l
+      - hand_r
+  capture:
+    name: Захват
+    description: Блок случайного вражеского модуля
+    damage: 1
+    energyCoast: 2
+    limit: 3
+    slots:
+      - hand_l
+      - hand_r
+  shield:
+    name: Щит
+    description: Блок одной вражеской атаки
+    energyCoast: 2
+    limit: 2
+    slots:
+      - hand_l
+      - hand_r
+  rocket:
+    name: Ракета
+    energyCoast: 3
+    damage: 3
+    limit: 2
+    slots:
+      - hand_l
+      - hand_r
+  saw:
+    name: Пила
+    description: Наносит 2 атаки
+    energyCoast: 3
+    damage: 2
+    limit: 2
+    slots:
+      - hand_l
+      - hand_r
+  machinegun:
+    name: Пулемёт
+    description: Наносит 3 атаки
+    energyCoast: 4
+    damage: 1
     limit: 2
     slots:
       - hand_l
@@ -26,7 +110,7 @@ module:
     name: Укрепление
     description: Пассивно увеличивает здоровье на 2
     healthBonus: 2
-    limit: 2
+    limit: 3
     slots:
       - core
     passive: true
@@ -34,13 +118,45 @@ module:
     name: Энергоячейка
     description: Пассивно увеличивает энергию на 4
     energyBonus: 4
-    limit: 2
+    limit: 3
     slots:
       - core
     passive: true
+  accelerator:
+    name: Акселератор
+    description: Игнорирование одной атаки
+    energyCoast: 3
+    limit: 2
+    slots:
+      - core
+
+
+  maneuvering:
+    name: Маневрирование
+    description: Уклонение от одной вражеской атаки
+    energyCoast: 3
+    limit: 3
+    slots:
+      - foot
+  attack:
+    name: Нападение
+    description: Урон следующей атаки удваивается
+    energyCoast: 3
+    limit: 1
+    slots:
+      - foot
+  ram:
+    name: Таран
+    description: Наносит урон
+    damage: 1
+    energyCoast: 2
+    limit: 3
+    slots:
+      - foot
+
 
 robots:
-  user:
+  vk:
     baseEnergy: 7
     baseHealth: 5
   core:

@@ -4,19 +4,11 @@
 namespace App\Http\Middleware;
 
 
-use App\Services\BattleService;
+use App\Battle\Battle;
 use Closure;
 
 class CheckBattleArmingMiddleware
 {
-    /** @var BattleService */
-    private $battleService;
-
-    public function __construct(BattleService $battleService)
-    {
-        $this->battleService = $battleService;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -27,9 +19,9 @@ class CheckBattleArmingMiddleware
     public function handle($request, Closure $next)
     {
         $battle_id = $request->route()[2]['battle_id'];
-        $battle = $this->battleService->load($battle_id);
+        $battle = Battle::load($battle_id);
 
-        throw_if(!$battle->isArming(), new \Exception('Битва в другом статусе'));
+        throw_if($battle->getStatus() !== Battle::STATUS_ARMING, new \Exception('Битва в другом статусе'));
 
         return $next($request);
     }

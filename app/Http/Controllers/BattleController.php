@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Member;
-use App\Modules\ModulesCollection;
-use App\Services\ArmingRoundService;
-use App\Services\BattleService;
+use App\Battle\Battle;
+use App\Battle\Factories\BattleFactory;
+use App\Battle\Factories\ModulesFactory;
+use App\Battle\Member;
 use App\Services\FightLog;
-use App\Services\FightRoundService;
-use App\Services\RobotsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BattleController extends Controller
 {
     public function dev() {
-
+        $battle = Battle::load(1);
+        dd($battle);
     }
 
-    public function create(Request $request, BattleService $battleService) {
+    public function create(Request $request) {
         $ids = $request->get('user_ids');
         $source = $request->get('source');
         $members = [];
@@ -26,36 +26,60 @@ class BattleController extends Controller
             $members []= (new Member($source))->setOwnerId($id);
         }
 
-        $battle = $battleService->createWithCore($members);
+        DB::beginTransaction();
+        try {
+            $battle = BattleFactory::createWithCore($members);
+
+            $battle->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
 
         return response()->json([
-            'battle_id' => $battle->model->id,
+            'battle_id' => $battle->getId(),
             'status' => $battle->getStatus(),
         ]);
     }
 
-    public function getArmingRound(int $battle_id, Request $request, ArmingRoundService $armingRoundService, RobotsService $robotsService) {
+    public function getArmingRound(int $battle_id, Request $request) {
         $user_id = $request->get('user_id');
         $source = $request->get('source');
-
         $member = (new Member($source))->setOwnerId($user_id);
+        DB::beginTransaction();
+        try {
+            $battle = Battle::load($battle_id);
 
-        $round = $armingRoundService->getCurrent($battle_id);
+            $arming_round = $battle->getCurrentArmingRoundOrCreate();
 
-        if (empty($round->getProposedUserModules($user_id))) {
+            $user_robot = $battle->getMemberRobot($member);
 
-            $robot = $robotsService->load($member, $battle_id);
-            $using_modules = $robot->getModules();
-            $armingRoundService->initProposedModules($round, $user_id, 3, $using_modules);
+            $proposed_modules = $arming_round->getProposedMemberModules($member);
+
+            if (count($proposed_modules) === 0) {
+
+                $installed_modules = array_values($user_robot->getModules());
+
+                $proposed_modules = ModulesFactory::getShuffledWithLimitAndExcluded($installed_modules, 3);
+
+                $arming_round->setProposedMemberModules($member, $proposed_modules);
+
+                $battle->save();
+
+                DB::commit();
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
         }
 
         return response()->json([
-            'modules' => ModulesCollection::toApiArrays($round->getProposedUserModules($user_id)),
-            'round_number' => $round->round_number,
+            'modules' => ModulesFactory::toArrays($arming_round->getProposedMemberModules($member)),
+            'round_number' => $arming_round->getRoundNumber(),
         ]);
     }
 
-    public function chooseModuleInArmingRound(int $battle_id, Request $request, ArmingRoundService $armingRoundService, RobotsService $robotsService) {
+    public function chooseModuleInArmingRound(int $battle_id, Request $request) {
         $user_id = $request->get('user_id');
         $source = $request->get('source');
         $module = $request->get('module');
@@ -63,92 +87,133 @@ class BattleController extends Controller
 
         $member = (new Member($source))->setOwnerId($user_id);
 
-        $armingRound = $armingRoundService->getCurrent($battle_id);
+        DB::beginTransaction();
+        try {
+            $battle = Battle::load($battle_id);
 
-        if (!empty($module)) {
+            $arming_round = $battle->getCurrentArmingRoundOrCreate();
 
-            $module_to_select = ModulesCollection::createFromCode($module);
+            if (!empty($module)) {
 
-            throw_if(!in_array($slot, $module_to_select->getSlots()), new \Exception('Нельзя установить модуль в этот слот'));
+                $module_to_install = ModulesFactory::createFromCode($module);
 
-            $proposed_modules = $armingRound->getProposedUserModules($user_id);
+                throw_if(!in_array($slot, $module_to_install->getSlots()), new \Exception('Нельзя установить модуль в этот слот'));
 
-            $diff = ModulesCollection::exclude([$module_to_select], $proposed_modules);
+                $proposed_modules = $arming_round->getProposedMemberModules($member);
 
-            throw_if(count($diff) > 0, new \Exception('Вам такие модули не предлагались'));
+                $diff = ModulesFactory::exclude([$module_to_install], $proposed_modules);
 
-            $armingRound->withSelectedUserModules([$module_to_select], $user_id);
-            $armingRound->save();
+                throw_if(count($diff) > 0, new \Exception('Вам такие модули не предлагались'));
 
-            $robot = $robotsService->load($member, $battle_id);
-            $robot->addModule($module_to_select, $slot);
+                $robot = $battle->getMemberRobot($member);
 
+                $robot->addModule($module_to_install, $slot);
+            }
+
+            $arming_round->finish();
+
+            $battle->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
         }
-
-        $armingRoundService->finish($armingRound);
 
         return response()->json(['status' => 'ok']);
     }
 
-    public function getRobot(int $battle_id, Request $request, RobotsService $robotsService) {
+    public function getRobot(int $battle_id, Request $request) {
         $user_id = $request->get('user_id');
         $source = $request->get('source');
 
         $member = (new Member($source))->setOwnerId($user_id);
 
-        $robot = $robotsService->load($member, $battle_id);
+        $battle = Battle::load($battle_id);
 
-        return response()->json($robot->toApiArray());
+        $robot = $battle->getMemberRobot($member);
+
+        return response()->json($robot->toArray());
     }
 
-    public function finishArming(int $battle_id, Request $request, BattleService $battleService, RobotsService $robotsService) {
-        $battle = $battleService->load($battle_id);
+    public function finishArming(int $battle_id) {
+        DB::beginTransaction();
+        try {
+            $battle = Battle::load($battle_id);
 
-        $battle->finishArming();
+            $battle->deleteStartedArmingRounds();
 
-        $coreMember = $battle->getCoreMember();
+            $core_member = $battle->getCoreMember();
 
-        $coreRobot = $robotsService->load($coreMember, $battle_id);
+            $core_robot = $battle->getMemberRobot($core_member);
 
-        $robotsService->fillCoreRobotWithModules($battle, $coreRobot);
+            $core_robot->fillWithRandomModules($battle);
+
+            $battle->finishArming();
+
+            $battle->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
 
         return response()->json(['status' => 'ok']);
     }
 
-    public function getCoreRobot(int $battle_id, Request $request, BattleService $battleService, RobotsService $robotsService) {
-        $battle = $battleService->load($battle_id);
+    public function getCoreRobot(int $battle_id) {
+        $battle = Battle::load($battle_id);
 
         $core_member = $battle->getCoreMember();
 
-        $robot = $robotsService->load($core_member, $battle_id);
+        $core_robot = $battle->getMemberRobot($core_member);
 
-        return response()->json($robot->toApiArray());
+        return response()->json($core_robot->toArray());
     }
 
-    public function fightRound(int $battle_id, Request $request, BattleService $battleService, RobotsService $robotsService, FightRoundService $fightRoundService) {
+    public function fightRound(int $battle_id, Request $request) {
         $user_id = $request->get('user_id');
         $source = $request->get('source');
-        $module_ids = $request->get('module_ids', []);
+        $modules_ids = $request->get('modules_ids', []);
 
         $member = (new Member($source))->setOwnerId($user_id);
-        $battle = $battleService->load($battle_id);
-        $fightRound = $fightRoundService->create($battle_id);
-        $battle->setFightRound($fightRound);
-        $coreModules = $fightRoundService->activateCoreModules($fightRound, $battle);
-        $userModules = $fightRoundService->activateUserModules($fightRound, $battle, $member, $module_ids);
-        $fightRoundService->setFightActions($userModules, $coreModules, $fightRound, $battle, $member);
-        $fightRoundService->processActions($fightRound, $battle);
-        $fightRoundService->finish($fightRound, $battle);
 
-        $winner = '';
-        if (count($battle->getWinners())) {
-            $winner = $battle->getWinners()[0]->getOwner() === Member::MEMBER_VK ? 'user' : 'core';
+        try {
+            $battle = Battle::load($battle_id);
+
+            $fight_round = $battle->getNewFightRound();
+
+            $core_robot = $battle->getMemberRobot($battle->getCoreMember());
+            $core_fight_modules = $core_robot->getRandomCoreModules();
+            $core_robot->activateModules($core_fight_modules);
+            $fight_round->setMemberModules($battle->getCoreMember(), $core_fight_modules);
+
+            $user_robot = $battle->getMemberRobot($member);
+            $user_fight_modules = $user_robot->getModulesByIds($modules_ids);
+            $user_robot->activateModules($user_fight_modules);
+            $fight_round->setMemberModules($member, $user_fight_modules);
+
+            $fight_round->fillActions($battle);
+
+            $fight_round->processActions($battle);
+
+            $fight_round->finish($battle);
+
+            $battle->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
         }
 
+        FightLog::clear();
+
+        $winner = count($battle->getWinners()) ? $battle->getWinners()[0]->getOwner() : '';
+
         return response()->json([
-            'log' => FightLog::read(),
+            'log' => $fight_round->getLog(),
             'status' => $battle->getStatus(),
             'winner' => $winner,
+            'round_number' => $fight_round->getRoundNumber(),
         ]);
     }
 }

@@ -4,19 +4,12 @@
 namespace App\Http\Middleware;
 
 
-use App\Domains\Member;
-use App\Services\BattleService;
+use App\Battle\Battle;
+use App\Battle\Member;
 use Closure;
 
 class CheckRobotHasModuleMiddleware
 {
-    /** @var BattleService */
-    private $battleService;
-
-    public function __construct(BattleService $battleService)
-    {
-        $this->battleService = $battleService;
-    }
 
     /**
      * Handle an incoming request.
@@ -28,7 +21,7 @@ class CheckRobotHasModuleMiddleware
     public function handle($request, Closure $next)
     {
         $battle_id = $request->route()[2]['battle_id'];
-        $battle = $this->battleService->load($battle_id);
+        $battle = Battle::load($battle_id);
         $module_id = $request->get('module');
         $slot = $request->get('slot');
         $user_id = $request->get('user_id');
