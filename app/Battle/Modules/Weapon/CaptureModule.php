@@ -4,8 +4,8 @@
 namespace App\Battle\Modules\Weapon;
 
 
+use App\Battle\Actions\BlockRandomMdlAction;
 use App\Battle\Actions\DamageEnergyAction;
-use App\Battle\Actions\OneAttackEvasionAction;
 use App\Battle\Battle;
 use App\Battle\Member;
 use App\Battle\Modules\BaseModule;
@@ -16,7 +16,7 @@ class CaptureModule extends BaseModule
     {
         return [
             (new DamageEnergyAction($action_owner, $round_opponent, $battle->getFightRoundnumber(), $this->getId()))->setDamage($this->getDamage()),
-            (new OneAttackEvasionAction($action_owner, $round_opponent, $battle->getFightRoundnumber(), $this->getId())),
+            (new BlockRandomMdlAction($action_owner, $round_opponent, $battle->getFightRoundnumber(), $this->getId())),
         ];
     }
 }
