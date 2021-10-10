@@ -30,6 +30,10 @@ class DamageHealthAction extends BaseAction
             $this->getModule($battle)->getName() .
             ")"
         );
+        FightLog::write(
+            FightLog::getRobotName($this->getTarget()->getOwner()) .
+            " полностью восстанавливает энергию"
+        );
 
         $this->markUsed(true);
         $fightRound->cancelTargetMemberActions($battle, $this->getTarget());
