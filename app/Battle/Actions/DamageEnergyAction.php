@@ -21,12 +21,19 @@ class DamageEnergyAction extends BaseAction
         $targetRobot = $battle->getMemberRobot($this->getTarget());
         $targetRobot->damageEnergy($this->getDamage());
 
-        FightLog::write(FightLog::getRobotName($this->getAuthor()->getOwner()) . " (" . $this->getModule($battle)->getName() . ") наносит " . FightLog::getDamageString($this->getDamage()) . " энергии");
+        FightLog::write(
+            FightLog::getRobotName($this->getAuthor()->getOwner()) .
+            " наносит " .
+            FightLog::getUnitsString($this->getDamage()) .
+            " урона энергии " .
+            FightLog::getRobotName($this->getTarget()->getOwner(), 2) .
+            " (" . $this->getModule($battle)->getName() . ")"
+        );
 
         if ($targetRobot->getEnergy() <= 0) {
             $this->markUsed(true);
             $targetRobot->loseLife(1);
-            FightLog::write(FightLog::getRobotName($this->getAuthor()->getOwner()) . " теряет жизнь");
+            FightLog::write(FightLog::getRobotName($this->getTarget()->getOwner()) . " теряет жизнь");
             $fightRound->cancelTargetMemberActions($battle, $this->getTarget());
         }
 

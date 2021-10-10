@@ -20,7 +20,14 @@ class DamageHealthAction extends BaseAction
         $targetRobot = $battle->getMemberRobot($this->target);
         $targetRobot->loseLife($this->getDamage());
 
-        FightLog::write(FightLog::getRobotName($this->getAuthor()->getOwner()) . " (" . $this->getModule($battle)->getName() . ") наносит " . FightLog::getDamageString($this->getDamage()) . " жизни");
+        FightLog::write(
+            FightLog::getRobotName($this->getAuthor()->getOwner()) .
+            " (" .
+            $this->getModule($battle)->getName() .
+            ") наносит " .
+            FightLog::getUnitsString($this->getDamage()) .
+            " урона жизни"
+        );
 
         $this->markUsed(true);
         $fightRound->cancelTargetMemberActions($battle, $this->getTarget());

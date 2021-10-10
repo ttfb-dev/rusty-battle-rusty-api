@@ -59,7 +59,11 @@ class FightRound
     public function cancelTargetMemberActions(Battle $battle, Member $member) {
         $sorted_actions = $this->getActions();
 
-        FightLog::write(FightLog::getRobotName($member->getOwner()) . " сбросил с себя все действия");
+        FightLog::write(
+            "все действия " .
+            FightLog::getRobotName($member->getOwner()) .
+            " отменены"
+        );
 
         foreach ($sorted_actions as $sort => $actions) {
             foreach ($actions as $action) {
@@ -109,6 +113,7 @@ class FightRound
             $robot = $battle->getMemberRobot($member);
             if (count($modules) === 0) {
                 FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " не стал активировать модули и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+                continue ;
             }
             $names_arr = [];
             foreach ($modules as $module) {
@@ -157,7 +162,12 @@ class FightRound
         foreach ($robots as $robot) {
             $energy = $robot->restoreEnergy();
             if ($energy) {
-                FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " восстановил энергию ({$energy})");
+                FightLog::write(
+                    FightLog::getRobotName($robot->getMemberOwner()) .
+                    " восстановил энергию (" .
+                    FightLog::getUnitsString($energy) .
+                    ")"
+                );
             }
         }
     }

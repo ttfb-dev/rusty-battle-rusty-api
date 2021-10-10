@@ -32,7 +32,13 @@ class DamageBonusNextMdlAction extends BaseAction
 
         $first_damage_module = $damage_modules[0];
 
-        FightLog::write("урон модуля " . $first_damage_module->getName() . " " . FightLog::getRobotName($this->target->getOwner(), 3) . " увеличен на " . FightLog::getDamageString(1));
+        FightLog::write("урон модуля " .
+            $first_damage_module->getName() .
+            " " .
+            FightLog::getRobotName($this->target->getOwner(), 3) .
+            " увеличен на " .
+            FightLog::getUnitsString(1)
+        );
 
         $actions_sorted = $fightRound->getActions();
         foreach ($actions_sorted as $actions) {

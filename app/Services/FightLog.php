@@ -22,8 +22,8 @@ class FightLog
         self::$log = [];
     }
 
-    public static function getDamageString(int $damage): string {
-        return self::num_decline($damage, ['единицу урона', 'единицы урона', 'единиц урона']);
+    public static function getUnitsString(int $damage): string {
+        return self::num_decline($damage, ['единицу', 'единицы', 'единиц']);
     }
 
     public static function getRobotName(string $owner, int $case = 1): string {
