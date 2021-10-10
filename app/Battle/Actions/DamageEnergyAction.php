@@ -26,7 +26,7 @@ class DamageEnergyAction extends BaseAction
         if ($targetRobot->getEnergy() <= 0) {
             $this->markUsed(true);
             $targetRobot->loseLife(1);
-            FightLog::write("Робот {$targetRobot->getMemberOwner()} теряет жизнь");
+            FightLog::write(ucfirst(FightLog::getRobotName($this->getAuthor()->getOwner())) . " теряет жизнь");
             $fightRound->cancelTargetMemberActions($battle, $this->getTarget());
         }
 
