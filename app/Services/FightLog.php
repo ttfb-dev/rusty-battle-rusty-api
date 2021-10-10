@@ -34,11 +34,11 @@ class FightLog
                 return 'вашему роботу';
             case 'vk.3':
                 return 'вашего робота';
-            case 'case.1':
+            case 'core.1':
                 return 'босс';
-            case 'case.2':
+            case 'core.2':
                 return 'боссу';
-            case 'case.3':
+            case 'core.3':
                 return 'босса';
         }
         return '';
