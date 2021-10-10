@@ -1,35 +1,35 @@
 module:
   garbage:
-    name: Мусор
-    description: Чего только не встретишь на свалке
+    name: мусор
+    description: чего только не встретишь на свалке
     limit: 4
 
 
   laser:
-    name: Лазер
-    description: Наносит урон
+    name: лазер
+    description: наносит урон
     damage: 1
     energyCoast: 2
     limit: 3
     slots:
       - head
   aim:
-    name: Прицел
-    description: Увеличивает на 1 первую атаку по врагу
+    name: прицел
+    description: увеличивает на 1 первую атаку по врагу
     energyCoast: 3
     limit: 3
     slots:
       - head
   barrier:
-    name: Барьер
-    description: Увеличивает оставшуюся после активации модулей энергию в 2 раза
+    name: барьер
+    description: увеличивает оставшуюся после активации модулей энергию в 2 раза
     energyCoast: 3
     limit: 3
     slots:
       - head
   sonicboom:
-    name: Звуковой удар
-    description: Увеличивает цену активации модулей врага на 1 на следующий ход
+    name: звуковой удар
+    description: увеличивает цену активации модулей врага на 1 на следующий ход
     energyCoast: 3
     limit: 3
     slots:
@@ -37,7 +37,7 @@ module:
 
 
   hammer:
-    name: Молот
+    name: молот
     damage: 5
     energyCoast: 4
     limit: 3
@@ -45,8 +45,8 @@ module:
       - hand_l
       - hand_r
   knife:
-    name: Нож
-    description: Наносит удар сквозь щит
+    name: нож
+    description: наносит удар сквозь щит
     damage: 1
     energyCoast: 2
     limit: 3
@@ -54,8 +54,8 @@ module:
       - hand_l
       - hand_r
   flamethrower:
-    name: Огнемёт
-    description: Наносит периодический урон (3 хода)
+    name: огнемёт
+    description: наносит периодический урон (3 хода)
     damage: 1
     energyCoast: 3
     limit: 3
@@ -63,8 +63,8 @@ module:
       - hand_l
       - hand_r
   capture:
-    name: Захват
-    description: Блок случайного вражеского модуля
+    name: захват
+    description: блок случайного вражеского модуля
     damage: 1
     energyCoast: 2
     limit: 3
@@ -72,15 +72,15 @@ module:
       - hand_l
       - hand_r
   shield:
-    name: Щит
-    description: Блок одной вражеской атаки
+    name: щит
+    description: блок одной вражеской атаки
     energyCoast: 2
     limit: 2
     slots:
       - hand_l
       - hand_r
   rocket:
-    name: Ракета
+    name: ракета
     energyCoast: 3
     damage: 3
     limit: 2
@@ -88,8 +88,8 @@ module:
       - hand_l
       - hand_r
   saw:
-    name: Пила
-    description: Наносит 2 атаки
+    name: пила
+    description: наносит 2 атаки
     energyCoast: 3
     damage: 2
     limit: 2
@@ -97,8 +97,8 @@ module:
       - hand_l
       - hand_r
   machinegun:
-    name: Пулемёт
-    description: Наносит 3 атаки
+    name: пулемёт
+    description: наносит 3 атаки
     energyCoast: 4
     damage: 1
     limit: 2
@@ -107,24 +107,24 @@ module:
       - hand_r
 
   strengthening:
-    name: Укрепление
-    description: Пассивно увеличивает здоровье на 2
+    name: укрепление
+    description: пассивно увеличивает здоровье на 2
     healthBonus: 2
     limit: 3
     slots:
       - core
     passive: true
   energycell:
-    name: Энергоячейка
-    description: Пассивно увеличивает энергию на 4
+    name: энергоячейка
+    description: пассивно увеличивает энергию на 4
     energyBonus: 4
     limit: 3
     slots:
       - core
     passive: true
   accelerator:
-    name: Акселератор
-    description: Игнорирование одной атаки
+    name: акселератор
+    description: игнорирование одной атаки
     energyCoast: 3
     limit: 2
     slots:
@@ -132,22 +132,22 @@ module:
 
 
   maneuvering:
-    name: Маневрирование
-    description: Уклонение от одной вражеской атаки
+    name: маневрирование
+    description: уклонение от одной вражеской атаки
     energyCoast: 3
     limit: 3
     slots:
       - foot
   attack:
-    name: Нападение
-    description: Урон следующей атаки удваивается
+    name: нападение
+    description: урон следующей атаки удваивается
     energyCoast: 3
     limit: 1
     slots:
       - foot
   ram:
-    name: Таран
-    description: Наносит урон
+    name: таран
+    description: наносит урон
     damage: 1
     energyCoast: 2
     limit: 3

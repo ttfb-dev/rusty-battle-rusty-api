@@ -28,7 +28,7 @@ class DownMdlEnergyCoastAction extends BaseAction
             }
         }
 
-        FightLog::write("Стоимость активации модулей " . FightLog::getRobotName($this->getAuthor()->getOwner(), 3) . " снижена");
+        FightLog::write("стоимость активации модулей " . FightLog::getRobotName($this->getAuthor()->getOwner(), 3) . " снижена");
 
         return true;
     }

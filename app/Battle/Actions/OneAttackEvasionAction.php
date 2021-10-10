@@ -27,7 +27,7 @@ class OneAttackEvasionAction extends BaseAction
                     && $action->isActive()
                     && $action->isInRound($fightRound->getRoundNumber())
                 ) {
-                    FightLog::write(ucfirst(FightLog::getRobotName($this->author->getOwner())) . " уворачивается от атаки " . FightLog::getRobotName($this->target->getOwner()) . " ({$action->getModule($battle)->getName()})");
+                    FightLog::write(FightLog::getRobotName($this->author->getOwner()) . " уворачивается от атаки " . FightLog::getRobotName($this->target->getOwner()) . " (" .$action->getModule($battle)->getName() . ")");
                     $action->setActive(false);
                     break;
                 }

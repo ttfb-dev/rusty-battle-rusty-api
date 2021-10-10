@@ -29,7 +29,7 @@ class BlockRandomMdlAction extends BaseAction
         $random_module_index = array_rand($target_modules, 1);
         $random_module = $target_modules[$random_module_index];
 
-        FightLog::write("Отключен случайный модуль " . FightLog::getRobotName($this->target->getOwner()) . ": " . lcfirst($random_module->getName()));
+        FightLog::write("отключен случайный модуль " . FightLog::getRobotName($this->target->getOwner()) . ": " . $random_module->getName());
 
         $actions_sorted = $fightRound->getActions();
         foreach ($actions_sorted as $actions) {

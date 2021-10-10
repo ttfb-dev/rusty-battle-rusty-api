@@ -59,7 +59,7 @@ class FightRound
     public function cancelTargetMemberActions(Battle $battle, Member $member) {
         $sorted_actions = $this->getActions();
 
-        FightLog::write(ucfirst(FightLog::getRobotName($member->getOwner())) . " сбросил с себя все действия");
+        FightLog::write(FightLog::getRobotName($member->getOwner()) . " сбросил с себя все действия");
 
         foreach ($sorted_actions as $sort => $actions) {
             foreach ($actions as $action) {
@@ -108,14 +108,14 @@ class FightRound
             $modules = $this->getMemberModules($member);
             $robot = $battle->getMemberRobot($member);
             if (count($modules) === 0) {
-                FightLog::write(ucfirst(FightLog::getRobotName($robot->getMemberOwner())) . " не стал активировать модули и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+                FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " не стал активировать модули и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
             }
             $names_arr = [];
             foreach ($modules as $module) {
-                $names_arr []= lcfirst($module->getName());
+                $names_arr []= $module->getName();
             }
             $names = implode(', ', $names_arr);
-            FightLog::write(ucfirst(FightLog::getRobotName($robot->getMemberOwner())) . " активировал модули: {$names} и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+            FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " активировал модули: {$names} и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
         }
         $current_round_number = $this->getRoundNumber();
         $delayed_actions = [];
@@ -147,7 +147,7 @@ class FightRound
         $robots = $battle->getRobots();
         foreach ($robots as $robot) {
             if ($robot->subtractHealth()) {
-                FightLog::write(ucfirst(FightLog::getRobotName($robot->getMemberOwner())) . " потерял здоровье");
+                FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " потерял здоровье");
             }
         }
     }
@@ -157,7 +157,7 @@ class FightRound
         foreach ($robots as $robot) {
             $energy = $robot->restoreEnergy();
             if ($energy) {
-                FightLog::write(ucfirst(FightLog::getRobotName($robot->getMemberOwner())) . " восстановил энергию ({$energy})");
+                FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " восстановил энергию ({$energy})");
             }
         }
     }
