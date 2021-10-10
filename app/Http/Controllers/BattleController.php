@@ -35,7 +35,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);DamageBonusNextMdlAction
             DB::rollback();
         }
 

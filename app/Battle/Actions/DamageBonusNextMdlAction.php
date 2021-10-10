@@ -26,9 +26,9 @@ class DamageBonusNextMdlAction extends BaseAction
             return true;
         }
 
-        $damage_modules = array_filter($author_modules, function (BaseModule $module) {
+        $damage_modules = array_values(array_filter($author_modules, function (BaseModule $module) {
             return $module->getDamage() > 0;
-        });
+        }));
 
         if (count($damage_modules) === 0) {
             return true;
