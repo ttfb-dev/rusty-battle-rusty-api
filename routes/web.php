@@ -44,12 +44,12 @@ $router->get('/v1/battle/{battle_id}/core-robot', [
 ]);
 
 $router->post('/v1/battle/{battle_id}/finish-arming', [
-    'middleware' => ['source', 'user_id', 'battle_arming', 'user_in_battle'],
+    'middleware' => ['source', 'user_id', 'battle_status:arming', 'user_in_battle'],
     'uses' => 'BattleController@finishArming'
 ]);
 
 $router->post('/v1/battle/{battle_id}/fight-round', [
-    'middleware' => ['source', 'user_id', 'battle_fight', 'user_in_battle'],
+    'middleware' => ['source', 'user_id', 'battle_status:fight', 'user_in_battle'],
     'uses' => 'BattleController@fightRound'
 ]);
 
