@@ -24,7 +24,13 @@ class OneTimeEnergyBonusAction extends BaseAction
 
         $authorRobot->setEnergy($energy_before * 2);
 
-        FightLog::write( FightLog::getRobotName($this->author->getOwner()) . " повысил энергию с {$energy_before} до {$authorRobot->getEnergy()}");
+        FightLog::write(
+            FightLog::getRobotName($this->author->getOwner()) .
+            " повысил энергию с " .
+            FightLog::getUnitsString($energy_before) .
+            " до " .
+            FightLog::getUnitsString($authorRobot->getEnergy())
+        );
 
         return true;
     }
