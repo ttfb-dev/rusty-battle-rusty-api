@@ -237,7 +237,7 @@ class BattleController extends Controller
             ]);
         }
         return response()->json([
-            'id' => $battle->getId(),
+            'battle_id' => $battle->getId(),
             'status' => $battle->getStatus(),
         ]);
     }
@@ -248,7 +248,7 @@ class BattleController extends Controller
         $battle->save();
 
         return response()->json([
-            'id' => $battle->getId(),
+            'battle_id' => $battle->getId(),
             'status' => $battle->getStatus(),
         ]);
     }
