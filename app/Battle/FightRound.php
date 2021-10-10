@@ -112,7 +112,13 @@ class FightRound
             $modules = $this->getMemberModules($member);
             $robot = $battle->getMemberRobot($member);
             if (count($modules) === 0) {
-                FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " не стал активировать модули и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+                FightLog::write(
+                    FightLog::getRobotName($robot->getMemberOwner()) .
+                    " не стал активировать модули и начал битву с " .
+                    FightLog::getUnitsString($robot->getEnergy()) .
+                    " энергии и " .
+                    FightLog::getUnitsString($robot->getHealth()) .
+                    " жизней");
                 continue ;
             }
             $names_arr = [];
@@ -120,7 +126,13 @@ class FightRound
                 $names_arr []= $module->getName();
             }
             $names = implode(', ', $names_arr);
-            FightLog::write(FightLog::getRobotName($robot->getMemberOwner()) . " активировал модули: {$names} и начал битву с {$robot->getEnergy()} энергии и {$robot->getHealth()} жизней");
+            FightLog::write(
+                FightLog::getRobotName($robot->getMemberOwner()) .
+                " активировал модули: {$names} и начал битву с " .
+                FightLog::getUnitsString($robot->getEnergy()) .
+                " энергии и " .
+                FightLog::getUnitsString($robot->getHealth()) .
+                " жизней");
         }
         $current_round_number = $this->getRoundNumber();
         $delayed_actions = [];
