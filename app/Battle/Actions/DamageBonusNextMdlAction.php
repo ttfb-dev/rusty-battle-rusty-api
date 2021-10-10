@@ -30,6 +30,10 @@ class DamageBonusNextMdlAction extends BaseAction
             return $module->getDamage() > 0;
         });
 
+        if (count($damage_modules) === 0) {
+            return true;
+        }
+
         $first_damage_module = $damage_modules[0];
 
         FightLog::write("урон модуля " .

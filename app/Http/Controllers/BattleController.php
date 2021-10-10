@@ -35,7 +35,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
             DB::rollback();
         }
 
@@ -72,7 +72,7 @@ class BattleController extends Controller
                 DB::commit();
             }
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
             DB::rollback();
         }
 
@@ -119,7 +119,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
             DB::rollback();
         }
 
@@ -158,7 +158,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
             DB::rollback();
         }
 
@@ -207,7 +207,7 @@ class BattleController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), [$e->getFile(), $e->getLine()]);
             DB::rollback();
         }
 
