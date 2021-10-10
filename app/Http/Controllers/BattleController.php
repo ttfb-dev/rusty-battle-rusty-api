@@ -232,7 +232,7 @@ class BattleController extends Controller
 
         if (!($battle instanceof Battle)) {
             return response()->json([
-                'id' => null,
+                'battle_id' => null,
                 'status' => null,
             ]);
         }
