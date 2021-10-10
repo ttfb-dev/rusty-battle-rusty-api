@@ -20,13 +20,14 @@ class OneAttackEvasionAction extends BaseAction
     {
         $sorted_actions = $fightRound->getActions();
 
-        $target_robot = $battle->getMemberRobot($this->target);
-        $author_robot = $battle->getMemberRobot($this->author);
-
         foreach ($sorted_actions as $actions) {
             foreach ($actions as $action) {
-                if ($action->getTarget()->equal($this->getAuthor()) && $action->getDamage() > 0 && $action->isActive()) {
-                    FightLog::write("Робот {$author_robot->getMemberOwner()} уворачивается от атаки {$action->getModule($battle)->getName()}");
+                if ($action->getTarget()->equal($this->getAuthor())
+                    && $action->getDamage() > 0
+                    && $action->isActive()
+                    && $action->isInRound($fightRound->getRoundNumber())
+                ) {
+                    FightLog::write(ucfirst(FightLog::getRobotName($this->author->getOwner())) . " уворачивается от атаки " . FightLog::getRobotName($this->target->getOwner()) . " ({$action->getModule($battle)->getName()})");
                     $action->setActive(false);
                     break;
                 }

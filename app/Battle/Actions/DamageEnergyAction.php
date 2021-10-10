@@ -21,7 +21,7 @@ class DamageEnergyAction extends BaseAction
         $targetRobot = $battle->getMemberRobot($this->getTarget());
         $targetRobot->damageEnergy($this->getDamage());
 
-        FightLog::write("Модуль {$this->getModule($battle)->getName()} наносит {$this->getDamage()} урона энергии роботу {$targetRobot->getMemberOwner()}");
+        FightLog::write(ucfirst(FightLog::getRobotName($this->getAuthor()->getOwner())) . " (" . lcfirst($this->getModule($battle)->getName()) . ") наносит " . FightLog::getDamageString($this->getDamage()) . " энергии");
 
         if ($targetRobot->getEnergy() <= 0) {
             $this->markUsed(true);

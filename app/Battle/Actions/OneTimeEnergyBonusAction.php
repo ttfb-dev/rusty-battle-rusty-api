@@ -24,7 +24,7 @@ class OneTimeEnergyBonusAction extends BaseAction
 
         $authorRobot->setEnergy($energy_before * 2);
 
-        FightLog::write("Робот {$authorRobot->getMemberOwner()} повысил энергию с {$energy_before} до {$authorRobot->getEnergy()}");
+        FightLog::write( ucfirst(FightLog::getRobotName($this->author->getOwner())) . " повысил энергию с {$energy_before} до {$authorRobot->getEnergy()}");
 
         return true;
     }

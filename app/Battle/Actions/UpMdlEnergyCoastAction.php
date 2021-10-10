@@ -6,6 +6,7 @@ namespace App\Battle\Actions;
 
 use App\Battle\Battle;
 use App\Battle\FightRound;
+use App\Services\FightLog;
 
 class UpMdlEnergyCoastAction extends BaseAction
 {
@@ -26,6 +27,8 @@ class UpMdlEnergyCoastAction extends BaseAction
                 $module->setEnergyCoast($module->getEnergyCoast() + 1);
             }
         }
+
+        FightLog::write("Стоимость активации модулей " . FightLog::getRobotName($this->getAuthor()->getOwner(), 3) . " повышена");
 
         return true;
     }

@@ -7,6 +7,7 @@ namespace App\Battle\Actions;
 use App\Battle\Battle;
 use App\Battle\FightRound;
 use App\Battle\Modules\BaseModule;
+use App\Services\FightLog;
 
 class DamageMultiplicationNextMdlAction extends BaseAction
 {
@@ -29,6 +30,8 @@ class DamageMultiplicationNextMdlAction extends BaseAction
         });
 
         $first_damage_module = $damage_modules[0];
+
+        FightLog::write("Урон модуля " . lcfirst($first_damage_module->getName()) . " " . FightLog::getRobotName($this->target->getOwner(), 3) . " увеличен вдвое");
 
         $actions_sorted = $fightRound->getActions();
         foreach ($actions_sorted as $actions) {

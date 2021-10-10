@@ -19,7 +19,9 @@ class DamageHealthAction extends BaseAction
     {
         $targetRobot = $battle->getMemberRobot($this->target);
         $targetRobot->loseLife($this->getDamage());
-        FightLog::write("Модуль {$this->getModule($battle)->getName()} наносит {$this->getDamage()} урона жизни роботу {$targetRobot->getMemberOwner()}");
+
+        FightLog::write(ucfirst(FightLog::getRobotName($this->getAuthor()->getOwner())) . " (" . lcfirst($this->getModule($battle)->getName()) . ") наносит " . FightLog::getDamageString($this->getDamage()) . " жизни");
+
         $this->markUsed(true);
         $fightRound->cancelTargetMemberActions($battle, $this->getTarget());
 
