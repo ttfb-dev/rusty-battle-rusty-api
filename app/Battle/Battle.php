@@ -11,12 +11,14 @@ use App\Battle\Modules\BaseModule;
 use App\Battle\Robots\BaseRobot;
 use Illuminate\Support\Facades\DB;
 use Zumba\JsonSerializer\JsonSerializer;
+use \App\Models\Battle as BattleModel;
 
 class Battle
 {
-    const STATUS_ARMING     = 'arming';
-    const STATUS_FIGHT      = 'fight';
-    const STATUS_FINISHED   = 'finished';
+    const STATUS_ARMING         = 'arming';
+    const STATUS_FIGHT          = 'fight';
+    const STATUS_FINISHED       = 'finished';
+    const STATUS_FORCE_FINISHED = 'force_finished';
 
     private $version = 1;
 
@@ -174,8 +176,8 @@ class Battle
         $this->status = self::STATUS_FIGHT;
     }
 
-    public function finish() {
-        $this->status = self::STATUS_FINISHED;
+    public function finish(bool $force = false) {
+        $this->status = $force ? self::STATUS_FORCE_FINISHED : self::STATUS_FINISHED;
     }
 
 
@@ -183,6 +185,7 @@ class Battle
     public function save() {
         $serialized = self::getSerializer()->serialize($this);
         DB::update('update battle_line set line = ? where id = ?', [$serialized, $this->id]);
+        $this->refreshModel();
     }
 
     public static function load(int $id): self {
@@ -193,5 +196,25 @@ class Battle
 
     private static function getSerializer(): JsonSerializer {
         return new JsonSerializer();
+    }
+
+    public static function whereIAm(Member $member): ?self {
+        $battleModel = BattleModel::query()
+            ->whereIn('status', [self::STATUS_FIGHT, self::STATUS_ARMING])
+            ->whereJsonContains('members', $member->toString())
+            ->first();
+
+        if (!($battleModel instanceof BattleModel)) {
+            return null;
+        }
+        return self::load($battleModel->id);
+    }
+
+    private function refreshModel() {
+        $battleModel = BattleModel::find($this->getId()) ?? new BattleModel(['id' => $this->getId()]);
+        $battleModel->status = $this->getStatus();
+        $battleModel->members = array_map(function (Member $member) { return $member->toString(); }, $this->getMembers());
+        $battleModel->winners = array_map(function (Member $winner) { return $winner->toString(); }, $this->getWinners());
+        $battleModel->save();
     }
 }

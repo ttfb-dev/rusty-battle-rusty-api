@@ -53,6 +53,16 @@ $router->post('/v1/battle/{battle_id}/fight-round', [
     'uses' => 'BattleController@fightRound'
 ]);
 
+$router->get('/v1/battle/where-i-am', [
+    'middleware' => ['source', 'user_id'],
+    'uses' => 'BattleController@whereIAm'
+]);
+
+$router->post('/v1/battle/{battle_id}/force-finish', [
+    'middleware' => ['source', 'user_id', 'battle_status:arming,fight'],
+    'uses' => 'BattleController@forceFinish'
+]);
+
 $router->get('/v1/dev', [
     'uses' => 'BattleController@dev'
 ]);

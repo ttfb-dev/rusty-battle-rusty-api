@@ -222,4 +222,35 @@ class BattleController extends Controller
             'round_number' => $fight_round->getRoundNumber(),
         ]);
     }
+
+    public function whereIAm(Request $request) {
+        $user_id = $request->get('user_id');
+        $source = $request->get('source');
+        $member = (new Member($source))->setOwnerId($user_id);
+
+        $battle = Battle::whereIAm($member);
+
+        if (!($battle instanceof Battle)) {
+            return response()->json([
+                'id' => null,
+                'status' => null,
+            ]);
+        }
+        return response()->json([
+            'id' => $battle->getId(),
+            'status' => $battle->getStatus(),
+        ]);
+    }
+
+    public function forceFinish(int $battle_id) {
+        $battle = Battle::load($battle_id);
+        $battle->finish(true);
+        $battle->save();
+
+        return response()->json([
+            'id' => $battle->getId(),
+            'status' => $battle->getStatus(),
+        ]);
+    }
+
 }

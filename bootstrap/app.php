@@ -80,6 +80,7 @@ $app->configure('app');
      'source' => App\Http\Middleware\CheckSourceMiddleware::class,
      'user_id' => App\Http\Middleware\CheckSourceMiddleware::class,
      'battle_arming' => App\Http\Middleware\CheckBattleArmingMiddleware::class,
+     'battle_status' => App\Http\Middleware\CheckBattleStatusMiddleware::class,
      'battle_fight' => App\Http\Middleware\CheckBattleFightMiddleware::class,
      'battle_finished' => App\Http\Middleware\CheckBattleFinishedMiddleware::class,
      'user_in_battle' => App\Http\Middleware\CheckUserInBattleMiddleware::class,

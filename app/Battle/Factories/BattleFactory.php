@@ -8,6 +8,7 @@ use App\Battle\Battle;
 use App\Battle\Member;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use \App\Models\Battle as BattleModel;
 
 class BattleFactory
 {

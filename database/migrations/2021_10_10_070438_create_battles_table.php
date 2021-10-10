@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBattleLineTable extends Migration
+class CreateBattlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateBattleLineTable extends Migration
      */
     public function up()
     {
-        Schema::create('battle_line', function (Blueprint $table) {
+        Schema::create('battles', function (Blueprint $table) {
             $table->id();
-            $table->longText('line');
+            $table->timestamps();
+            $table->json('members')->nullable();
+            $table->string('status')->nullable();
+            $table->json('winners')->nullable();
         });
     }
 
@@ -26,6 +29,6 @@ class CreateBattleLineTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('battle_line');
+        Schema::dropIfExists('battles');
     }
 }
