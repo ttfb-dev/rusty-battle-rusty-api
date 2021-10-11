@@ -6,7 +6,9 @@ namespace App\Battle\Actions;
 
 use App\Battle\Battle;
 use App\Battle\FightRound;
+use App\Services\ConfigService;
 use App\Services\FightLog;
+use Illuminate\Support\Facades\Log;
 
 class DamageEnergyAction extends BaseAction
 {
@@ -19,7 +21,9 @@ class DamageEnergyAction extends BaseAction
     public function handle(Battle $battle, FightRound $fightRound): bool
     {
         $targetRobot = $battle->getMemberRobot($this->getTarget());
+        $points = $this->getDamage() > $targetRobot->getEnergy() ? $targetRobot->getEnergy() : $this->getDamage();
         $targetRobot->damageEnergy($this->getDamage());
+        $battle->addPoints($points * ConfigService::getPoints("{$this->getAuthor()->getOwner()}_damage_energy_coef"));
 
         FightLog::write(
             FightLog::getRobotName($this->getAuthor()->getOwner()) .

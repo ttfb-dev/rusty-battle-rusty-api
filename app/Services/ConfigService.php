@@ -58,6 +58,10 @@ class ConfigService
         return self::getMap()['robots'][$robot]['baseEnergy'] ?? $default;
     }
 
+    public static function getPoints(string $action, float $default = 0.0): float {
+        return self::getGeneral('points', [])[$action] ?? $default;
+    }
+
     public static function getMap() {
         if (!self::$map) {
             self::$map = Yaml::parse(file_get_contents('/var/www/rusty-api/game-balance.config.yaml'));

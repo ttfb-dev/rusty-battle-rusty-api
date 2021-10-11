@@ -187,3 +187,9 @@ general:
   core_use_energy_on_modules_in_percents:
     min: 50
     max: 75
+  points:
+    version: 1
+    finish_arming_round: -3
+    finish_fight_round: -2
+    vk_damage_energy_coef: 1
+    core_damage_energy_coef: -0.5

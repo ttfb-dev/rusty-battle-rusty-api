@@ -10,6 +10,8 @@ class Battle extends Model
         'members',
         'winners',
         'status',
+        'points',
+        'points_version',
     ];
 
     protected $casts = [

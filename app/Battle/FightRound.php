@@ -60,7 +60,7 @@ class FightRound
         $sorted_actions = $this->getActions();
 
         FightLog::write(
-            "все действия по " .
+            "все оставшиеся действия по " .
             FightLog::getRobotName($member->getOwner(), 2) .
             " отменены"
         );

@@ -5,6 +5,7 @@ namespace App\Battle\Actions;
 
 use App\Battle\Battle;
 use App\Battle\FightRound;
+use App\Services\ConfigService;
 use App\Services\FightLog;
 
 class DamageHealthAction extends BaseAction
@@ -18,6 +19,10 @@ class DamageHealthAction extends BaseAction
     public function handle(Battle $battle, FightRound $fightRound): bool
     {
         $targetRobot = $battle->getMemberRobot($this->target);
+        $points = $this->getDamage() === 1
+            ? $targetRobot->getEnergy()
+            : $targetRobot->getEnergy() + ($targetRobot->getEnergyMax() * ($this->getDamage() - 1));
+        $battle->addPoints($points * ConfigService::getPoints("{$this->getAuthor()->getOwner()}_damage_energy_coef"));
         $targetRobot->loseLife($this->getDamage());
 
         FightLog::write(

@@ -9,7 +9,9 @@ use App\Battle\Factories\ArmingRoundFactory;
 use App\Battle\Factories\FightRoundFactory;
 use App\Battle\Modules\BaseModule;
 use App\Battle\Robots\BaseRobot;
+use App\Services\ConfigService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Zumba\JsonSerializer\JsonSerializer;
 use \App\Models\Battle as BattleModel;
 
@@ -44,6 +46,9 @@ class Battle
 
     /** @var BaseAction[] */
     private $delayed_actions = [];
+
+    /** @var int */
+    private $points = 0;
 
     public function __construct(int $battle_id)
     {
@@ -86,6 +91,21 @@ class Battle
                 $this->arming_rounds = array_values($this->arming_rounds);
             }
         }
+    }
+
+    public function addPoints(int $points): self {
+        $this->points += $points;
+        Log::debug("add points: $points");
+        return $this;
+    }
+
+    public function setPoints(int $points): self {
+        $this->points = $points;
+        return $this;
+    }
+
+    public function getPoints(): int {
+        return $this->points;
     }
 
     /** @return FightRound[] */
@@ -181,7 +201,6 @@ class Battle
     }
 
 
-
     public function save() {
         $serialized = self::getSerializer()->serialize($this);
         DB::update('update battle_line set line = ? where id = ?', [$serialized, $this->id]);
@@ -215,6 +234,8 @@ class Battle
         $battleModel->status = $this->getStatus();
         $battleModel->members = array_map(function (Member $member) { return $member->toString(); }, $this->getMembers());
         $battleModel->winners = array_map(function (Member $winner) { return $winner->toString(); }, $this->getWinners());
+        $battleModel->points = $this->getPoints();
+        $battleModel->points_version = ConfigService::getPoints('version', 1);
         $battleModel->save();
     }
 }

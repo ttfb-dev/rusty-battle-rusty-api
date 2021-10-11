@@ -6,6 +6,7 @@ use App\Battle\Battle;
 use App\Battle\Factories\BattleFactory;
 use App\Battle\Factories\ModulesFactory;
 use App\Battle\Member;
+use App\Services\ConfigService;
 use App\Services\FightLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,6 +116,8 @@ class BattleController extends Controller
 
             $arming_round->finish();
 
+            $battle->addPoints(ConfigService::getPoints('finish_arming_round'));
+
             $battle->save();
 
             DB::commit();
@@ -203,6 +206,8 @@ class BattleController extends Controller
 
             $fight_round->finish($battle);
 
+            $battle->addPoints(ConfigService::getPoints('finish_fight_round'));
+
             $battle->save();
 
             DB::commit();
@@ -220,6 +225,7 @@ class BattleController extends Controller
             'status' => $battle->getStatus(),
             'winner' => $winner,
             'round_number' => $fight_round->getRoundNumber(),
+            'points' => $battle->getStatus() === Battle::STATUS_FINISHED ? $battle->getPoints() : 0,
         ]);
     }
 
