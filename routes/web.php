@@ -24,12 +24,12 @@ $router->post('/v1/battle', [
 ]);
 
 $router->get('/v1/battle/{battle_id}/arming-round', [
-    'middleware' => ['source', 'user_id', 'battle_arming', 'user_in_battle'],
+    'middleware' => ['source', 'user_id', 'battle_status:arming', 'user_in_battle'],
     'uses' => 'BattleController@getArmingRound'
 ]);
 
 $router->post('/v1/battle/{battle_id}/arming-round', [
-    'middleware' => ['source', 'user_id', 'battle_arming', 'user_in_battle'],
+    'middleware' => ['source', 'user_id', 'battle_status:arming', 'user_in_battle'],
     'uses' => 'BattleController@chooseModuleInArmingRound'
 ]);
 
@@ -61,6 +61,11 @@ $router->get('/v1/battle/where-i-am', [
 $router->post('/v1/battle/{battle_id}/force-finish', [
     'middleware' => ['source', 'user_id', 'battle_status:arming,fight'],
     'uses' => 'BattleController@forceFinish'
+]);
+
+$router->get('/robots/{image_name}.png', [
+    'middleware' => ['image_md5'],
+    'uses' => 'ImageController@getImage'
 ]);
 
 $router->get('/v1/dev', [

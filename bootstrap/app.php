@@ -79,11 +79,9 @@ $app->configure('app');
  $app->routeMiddleware([
      'source' => App\Http\Middleware\CheckSourceMiddleware::class,
      'user_id' => App\Http\Middleware\CheckSourceMiddleware::class,
-     'battle_arming' => App\Http\Middleware\CheckBattleArmingMiddleware::class,
      'battle_status' => App\Http\Middleware\CheckBattleStatusMiddleware::class,
-     'battle_fight' => App\Http\Middleware\CheckBattleFightMiddleware::class,
-     'battle_finished' => App\Http\Middleware\CheckBattleFinishedMiddleware::class,
      'user_in_battle' => App\Http\Middleware\CheckUserInBattleMiddleware::class,
+     'image_md5' => App\Http\Middleware\IsMD5Middleware::class
  ]);
 
 /*
@@ -99,7 +97,11 @@ $app->configure('app');
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Aws\Laravel\AwsServiceProvider::class);
+
+if (!class_exists('AWS')) {
+    class_alias(Aws\Laravel\AwsFacade::class, 'AWS');
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +115,8 @@ $app->configure('app');
 */
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
+$app->register(Aws\Laravel\AwsServiceProvider::class);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
