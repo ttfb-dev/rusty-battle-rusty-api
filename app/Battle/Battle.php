@@ -93,8 +93,8 @@ class Battle
         }
     }
 
-    public function addPoints(int $points): self {
-        $this->points += $points;
+    public function addPoints(float $points): self {
+        $this->points += (int)round($points);
         return $this;
     }
 
