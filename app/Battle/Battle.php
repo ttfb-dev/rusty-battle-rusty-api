@@ -95,7 +95,6 @@ class Battle
 
     public function addPoints(int $points): self {
         $this->points += $points;
-        Log::debug("add points: $points");
         return $this;
     }
 
