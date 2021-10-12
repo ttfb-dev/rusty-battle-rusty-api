@@ -29,3 +29,4 @@ echo "$K8S_CONFIG" > ./build/k8s-for-stage/ttfb-k8s.kubeconfig
 kubectl apply -f ./build/k8s-for-stage/configmap.yaml --kubeconfig=./build/k8s-for-stage/ttfb-k8s.kubeconfig -n ${NAMESPACE}
 kubectl apply -f ./build/k8s-for-stage/service.yaml --kubeconfig=./build/k8s-for-stage/ttfb-k8s.kubeconfig -n ${NAMESPACE}
 kubectl apply -f ./build/k8s-for-stage/deployment.yaml --kubeconfig=./build/k8s-for-stage/ttfb-k8s.kubeconfig -n ${NAMESPACE}
+kubectl apply -f ./build/k8s-for-stage/ingress.yaml --kubeconfig=./build/k8s-for-stage/ttfb-k8s.kubeconfig -n ${NAMESPACE}
