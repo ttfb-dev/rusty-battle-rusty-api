@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: K8S_PROJECT_NAME
+  namespace: K8S_NAMESPACE
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  rules:
+    - host: robots.k8s.robots-game.ru
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: K8S_PROJECT_NAME-nginx
+              servicePort: 80

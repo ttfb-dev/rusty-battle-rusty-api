@@ -1,12 +1,13 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
 export $(cat ./build/.env.base)
 
-export COMPOSE_FILE=docker-compose.yml
-export COMPOSE_PROJECT_NAME=rusty-api
+docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+docker build -f ./build/nginx/Dockerfile -t "registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:nginx-$CI_COMMIT_SHORT_SHA" ./
+docker push "registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:nginx-$CI_COMMIT_SHORT_SHA"
 
-docker-compose build
-docker-compose push
+docker build -f ./build/php-fpm/Dockerfile -t "registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:php-fpm-$CI_COMMIT_SHORT_SHA" ./
+docker push "registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:php-fpm-$CI_COMMIT_SHORT_SHA"

@@ -1,25 +1,26 @@
 stages:
+  - build
   - production
 
-before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+image: docker:git
+services:
+  - docker:dind
 
-build_images:
-  image: docker:latest
-  stage: production
+build_images_for_k8s:
+  stage: build
   only:
     - master
   script:
-    - export DB_HOST=$CI_PROD_DB_HOST
-    - export DB_SSL=require
-    - export DB_PORT=$CI_PROD_DB_PORT
-    - export DB_DATABASE=$CI_PROD_DB_DATABASE
-    - export DB_USERNAME=$CI_PROD_DB_USERNAME
-    - export DB_PASSWORD=$CI_PROD_DB_PASSWORD
-    - export APP_KEY=$CI_APP_KEY
-    - export AWS_ACCESS_KEY_ID=$CI_AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$CI_AWS_SECRET_ACCESS_KEY
-    - ./build/run-build
-    - ./build/run
+    -  ./build/run-build
   tags:
-    - production
+    - docker
+
+deploy_prod_k8s:
+  stage: production
+  image: lwolf/helm-kubectl-docker:latest
+  only:
+    - master
+  script:
+    - ./build/run-k8s
+  tags:
+    - docker

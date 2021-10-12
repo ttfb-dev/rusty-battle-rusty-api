@@ -1,0 +1,117 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: K8S_PROJECT_NAME-nginx-deployment
+  namespace: K8S_NAMESPACE
+  labels:
+    name: K8S_PROJECT_NAME-nginx
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      name: K8S_PROJECT_NAME-nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        name: K8S_PROJECT_NAME-nginx
+    spec:
+      containers:
+        - name: K8S_PROJECT_NAME-nginx
+          image: registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:nginx-K8S_IMAGE_TAG
+          imagePullPolicy: Always
+          command: [ "nginx", "-g", "daemon off;" ]
+          resources:
+            limits:
+              memory: "100Mi"
+              cpu: "200m"
+            requests:
+              memory: "100Mi"
+              cpu: "200m"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: K8S_PROJECT_NAME-php-fpm-deployment
+  namespace: K8S_NAMESPACE
+  labels:
+    name: K8S_PROJECT_NAME-php-fpm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      name: K8S_PROJECT_NAME-php-fpm
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        name: K8S_PROJECT_NAME-php-fpm
+    spec:
+      containers:
+        - name: K8S_PROJECT_NAME-php-fpm
+          image: registry.gitlab.com/robots-miniapp/rusty-api/rusty-api:php-fpm-K8S_IMAGE_TAG
+          imagePullPolicy: Always
+          command: ["php-fpm", "--allow-to-run-as-root"]
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          env:
+            - name: DB_CONNECTION
+              value: "pgsql"
+            - name: DB_HOST
+              value: "172.16.16.4"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_DATABASE
+              value: "default_db"
+            - name: DB_USERNAME
+              value: "gen_user"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rusty-db-cred
+                  key: db_password
+            - name: AWS_ENDPOINT
+              value: "ams3.digitaloceanspaces.com"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: rusty-s3-cred
+                  key: access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rusty-s3-cred
+                  key: secret_access_key
+            - name: AWS_BUCKET
+              value: "nastavnichestvo"
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rusty-app-cred
+                  key: app_key
+---
