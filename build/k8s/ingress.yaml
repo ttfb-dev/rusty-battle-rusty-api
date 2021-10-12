@@ -8,7 +8,7 @@ metadata:
     certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
 spec:
   rules:
-    - host: robots.k8s.robots-game.ru
+    - host: avatar.k8s.robots-game.ru
       http:
         paths:
           - path: /robots
