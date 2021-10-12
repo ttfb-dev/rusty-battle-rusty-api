@@ -11,7 +11,7 @@ spec:
     - host: robots.k8s.robots-game.ru
       http:
         paths:
-          - path: /
+          - path: /robots
             backend:
               serviceName: K8S_PROJECT_NAME-nginx
               servicePort: 80
