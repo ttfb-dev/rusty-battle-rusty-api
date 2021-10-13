@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - robots-game.ru
+        - spy-game.ru
       secretName: robots-game-prod-tls
   rules:
-    - host: robots-game.ru
+    - host: spy-game.ru
       http:
         paths:
           - path: /
