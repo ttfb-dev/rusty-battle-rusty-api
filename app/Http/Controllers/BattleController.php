@@ -20,17 +20,14 @@ class BattleController extends Controller
     }
 
     public function create(Request $request) {
-        $ids = $request->get('user_ids');
+        $id = $request->get('user_id');
         $source = $request->get('source');
-        $members = [];
 
-        foreach ($ids as $id) {
-            $members []= (new Member($source))->setOwnerId($id);
-        }
+        $member = (new Member($source))->setOwnerId($id);
 
         DB::beginTransaction();
         try {
-            $battle = BattleFactory::createWithCore($members);
+            $battle = BattleFactory::createWithCore([$member]);
 
             $battle->save();
 
