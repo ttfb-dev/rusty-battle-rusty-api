@@ -63,10 +63,12 @@ $router->post('/v1/battle/{battle_id}/force-finish', [
     'uses' => 'BattleController@forceFinish'
 ]);
 
+
 $router->get('/robots/{image_name}.png', [
     'middleware' => ['image_md5'],
     'uses' => 'ImageController@getImage'
 ]);
+
 
 $router->get('/v1/dev', [
     'uses' => 'BattleController@dev'
