@@ -3,16 +3,9 @@ kind: Ingress
 metadata:
   name: K8S_PROJECT_NAME
   namespace: K8S_NAMESPACE
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    certmanager.k8s.io/cluster-issuer: "letsencrypt-staging"
 spec:
-  tls:
-    - hosts:
-        - spy-game.ru
-      secretName: robots-game-prod-tls
   rules:
-    - host: spy-game.ru
+    - host: k8s.robots-game.ru
       http:
         paths:
           - path: /
