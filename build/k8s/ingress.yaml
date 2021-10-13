@@ -5,14 +5,14 @@ metadata:
   namespace: K8S_NAMESPACE
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    certmanager.k8s.io/cluster-issuer: "letsencrypt-prod"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-staging"
 spec:
   tls:
     - hosts:
-        - avatar.k8s.robots-game.ru
-      secretName: avatar-rusty-api-prod-tls
+        - api.k8s.robots-game.ru
+      secretName: rusty-api-prod-tls
   rules:
-    - host: avatar.k8s.robots-game.ru
+    - host: api.k8s.robots-game.ru
       http:
         paths:
           - path: /
