@@ -20,10 +20,10 @@ class BattleController extends Controller
     }
 
     public function create(Request $request) {
-        $id = $request->get('user_id');
+        $user_id = $request->get('user_id');
         $source = $request->get('source');
 
-        $member = (new Member($source))->setOwnerId($id);
+        $member = (new Member($source))->setOwnerId($user_id);
 
         DB::beginTransaction();
         try {
