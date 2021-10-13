@@ -4,6 +4,10 @@ metadata:
   name: K8S_PROJECT_NAME
   namespace: K8S_NAMESPACE
 spec:
+  tls:
+    - hosts:
+        - k8s.robots-game.ru
+      secretName: rusty-tls-secret
   rules:
     - host: k8s.robots-game.ru
       http:
