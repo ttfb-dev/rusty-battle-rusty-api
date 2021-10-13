@@ -5,7 +5,7 @@ metadata:
   namespace: K8S_NAMESPACE
 data:
   DB_CONNECTION: "pgsql"
-  DB_HOST: "172.16.16.4"
+  DB_HOST: "92.255.78.58"
   DB_PORT: "5432"
   DB_DATABASE: "default_db"
   DB_USERNAME: "gen_user"
