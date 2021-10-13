@@ -81,6 +81,7 @@ $app->configure('app');
      'user_id' => App\Http\Middleware\CheckSourceMiddleware::class,
      'battle_status' => App\Http\Middleware\CheckBattleStatusMiddleware::class,
      'user_in_battle' => App\Http\Middleware\CheckUserInBattleMiddleware::class,
+     'is_in_battle' => App\Http\Middleware\IsInBattleMiddleware::class,
      'image_md5' => App\Http\Middleware\IsMD5Middleware::class
  ]);
 

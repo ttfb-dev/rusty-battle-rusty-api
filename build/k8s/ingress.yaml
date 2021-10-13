@@ -6,10 +6,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - k8s.robots-game.ru
+        - api.robots-game.ru
       secretName: rusty-tls-secret
   rules:
-    - host: k8s.robots-game.ru
+    - host: api.robots-game.ru
       http:
         paths:
           - path: /

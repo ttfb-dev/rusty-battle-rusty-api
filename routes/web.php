@@ -19,7 +19,7 @@ $router->get('/', function () use ($router) {
 
 
 $router->post('/v1/battle', [
-    'middleware' => ['source'],
+    'middleware' => ['source', 'is_in_battle'],
     'uses' => 'BattleController@create'
 ]);
 
@@ -64,7 +64,7 @@ $router->post('/v1/battle/{battle_id}/force-finish', [
 ]);
 
 
-$router->get('/robots/{image_name}.png', [
+$router->get('/avatar/{image_name}.png', [
     'middleware' => ['image_md5'],
     'uses' => 'ImageController@getImage'
 ]);
