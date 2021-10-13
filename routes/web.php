@@ -63,6 +63,11 @@ $router->post('/v1/battle/{battle_id}/force-finish', [
     'uses' => 'BattleController@forceFinish'
 ]);
 
+$router->get('/v1/top-list', [
+    'middleware' => ['source'],
+    'uses' => 'BattleController@topList'
+]);
+
 
 $router->get('/avatar/{image_name}.png', [
     'middleware' => ['image_md5'],

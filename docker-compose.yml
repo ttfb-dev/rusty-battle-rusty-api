@@ -10,7 +10,7 @@ services:
     container_name: rusty-api-nginx
     build:
       context: ./
-      dockerfile: build/nginx/Dockerfile
+      dockerfile: build/nginx-dev/Dockerfile
     image: registry.gitlab.com/robots-miniapp/rusty-api:nginx
     restart: 'always'
     env_file: ./build/.env.list

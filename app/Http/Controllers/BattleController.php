@@ -11,6 +11,7 @@ use App\Services\FightLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\Battle as BattleModel;
 
 class BattleController extends Controller
 {
@@ -254,6 +255,17 @@ class BattleController extends Controller
             'battle_id' => $battle->getId(),
             'status' => $battle->getStatus(),
         ]);
+    }
+
+    public function topList(Request $request) {
+        $source = $request->get('source');
+        $battles = BattleModel::query()
+            ->where('points_version', ConfigService::getPoints('version', 1))
+            ->whereRaw('members::text LIKE \'%' . $source . '%\'')
+            ->orderBy('points')
+            ->get();
+
+        dd($battles);
     }
 
 }
