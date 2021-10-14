@@ -85,6 +85,11 @@ spec:
                 secretKeyRef:
                   name: rusty-db-cred
                   key: db_password
+            - name: VK_SERVICE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rusty-vk-cred
+                  key: vk_app_token
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
