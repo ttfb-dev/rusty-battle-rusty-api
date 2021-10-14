@@ -6,10 +6,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - api.robots-game.ru
+        - api.rusty-battle.ru
       secretName: rusty-tls-secret
   rules:
-    - host: api.robots-game.ru
+    - host: api.rusty-battle.ru
       http:
         paths:
           - path: /
