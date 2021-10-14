@@ -8,6 +8,7 @@ use App\Battle\Factories\ModulesFactory;
 use App\Battle\Member;
 use App\Services\ConfigService;
 use App\Services\FightLog;
+use App\Services\LeaderboardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -257,15 +258,11 @@ class BattleController extends Controller
         ]);
     }
 
-    public function topList(Request $request) {
+    public function topList(Request $request, LeaderboardService $leaderboardService) {
         $source = $request->get('source');
-        $battles = BattleModel::query()
-            ->where('points_version', ConfigService::getPoints('version', 1))
-            ->whereRaw('members::text LIKE \'%' . $source . '%\'')
-            ->orderBy('points')
-            ->get();
+        $rows = $leaderboardService->getLeaderBoard($source);
 
-        dd($battles);
+        return response()->json(['top' => $rows]);
     }
 
 }
