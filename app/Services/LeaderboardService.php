@@ -5,11 +5,12 @@ namespace App\Services;
 
 
 use Illuminate\Support\Facades\DB;
+use App\Battle\Member;
 
 class LeaderboardService
 {
     public function getLeaderBoard(string $owner, int $limit = 25): array {
-        return DB::select("
+        $rows = DB::select("
             select
                    battle_id,
                    adaptive.member,
@@ -41,5 +42,11 @@ class LeaderboardService
             order by points desc
             limit $limit
         ") ?? [];
+
+        foreach ($rows as &$row) {
+          $row['member'] = Member::fromString($row['member'])->toArray();
+        }
+
+        return $rows;
     }
 }
