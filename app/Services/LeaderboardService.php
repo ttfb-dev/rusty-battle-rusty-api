@@ -18,9 +18,10 @@ class LeaderboardService
         foreach ($members_max_score as $row) {
             $battle = Battle::query()
                 ->whereJsonContains('members', $row['member'])
-                ->where('points')
+                ->where('points', $row['points'])
                 ->where('points_version', $points_version)
                 ->first();
+            
             if ($battle instanceof Battle) {
                 $result []= [
                     'battle_id' => $battle->id,
