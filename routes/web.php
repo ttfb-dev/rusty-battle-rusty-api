@@ -68,6 +68,11 @@ $router->get('/v1/top-list', [
     'uses' => 'BattleController@topList'
 ]);
 
+$router->get('/v1/battle/history', [
+    'middleware' => ['source', 'user_id'],
+    'uses' => 'BattleController@getHistory'
+]);
+
 
 $router->get('/avatar/{image_name}.png', [
     'middleware' => ['image_md5'],

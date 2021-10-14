@@ -8,6 +8,7 @@ use App\Battle\Factories\ModulesFactory;
 use App\Battle\Member;
 use App\Services\ConfigService;
 use App\Services\FightLog;
+use App\Services\HistoryService;
 use App\Services\LeaderboardService;
 use App\Services\VKApiService;
 use Illuminate\Http\Request;
@@ -261,6 +262,17 @@ class BattleController extends Controller
         $rows = $leaderboardService->getLeaderBoard($source);
 
         return response()->json(['top' => $rows]);
+    }
+
+    public function getHistory(Request $request, HistoryService $historyService) {
+        $user_id = $request->get('user_id');
+        $source = $request->get('source');
+        $member = (new Member($source))->setOwnerId($user_id);
+        $history = $historyService->getMemberHistory($member);
+
+        return response()->json([
+            'history' => $history
+        ]);
     }
 
 }
