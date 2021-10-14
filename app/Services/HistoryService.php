@@ -24,6 +24,7 @@ class HistoryService
                 'points' => $battle->points,
                 'points_version' => $battle->points_version,
                 'status' => $battle->status,
+                'win' => in_array($member->toString(), $battle->winners),
             ];
         }
         return $result;
