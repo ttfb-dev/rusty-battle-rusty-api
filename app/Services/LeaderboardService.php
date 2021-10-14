@@ -39,12 +39,14 @@ class LeaderboardService
                 order by max_points DESC
             ) as top
             on top.member = adaptive.member and top.max_points = adaptive.points
+            where points >= 0
             order by points desc
             limit $limit
         ") ?? [];
 
         foreach ($rows as &$row) {
-          $row['member'] = Member::fromString($row['member'])->toArray();
+            $row = (array)$row;
+            $row['member'] = Member::fromString($row['member'])->toArray();
         }
 
         return $rows;
