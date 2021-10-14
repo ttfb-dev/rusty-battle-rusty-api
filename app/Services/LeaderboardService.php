@@ -3,44 +3,53 @@
 
 namespace App\Services;
 
-
+use App\Models\Battle;
 use Illuminate\Support\Facades\DB;
 use App\Battle\Member;
 
 class LeaderboardService
 {
     public function getLeaderBoard(string $owner, int $limit = 25): array {
+        $points_version = ConfigService::getPoints('version', 1);
+        $members_max_score = $this->getMemberMaxScore($owner, $points_version, $limit);
+
+        $result = [];
+
+        foreach ($members_max_score as $row) {
+            $battle = Battle::query()
+                ->whereJsonContains('members', $row['member'])
+                ->where('points')
+                ->where('points_version', $points_version)
+                ->first();
+            if ($battle instanceof Battle) {
+                $result []= [
+                    'battle_id' => $battle->id,
+                    'updated_at' => $battle->updated_at,
+                    'member' => Member::fromString($row['member'])->toArray(),
+                    'points' => $row['points']
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    private function getMemberMaxScore(string $owner, int $points_version, int $limit = 25): array {
         $rows = DB::select("
-            select
-                   battle_id,
-                   adaptive.member,
-                   adaptive.points,
-                   updated_at
+            select member,
+                   max(points) as max_points
             from (
-                select
-                       id as battle_id,
-                       split_part(json_array_elements(members)::text, '\"', 2) as member,
-                       points,
-                       updated_at
-                from battles
-            ) adaptive
-            inner join (
-                select member,
-                       max(points) as max_points
-                from (
-                         select split_part(json_array_elements(members)::text, '\"', 2) as member,
-                                points
-                         from battles
-                         where points_version = 1
-                         order by points DESC
-                     ) inner_top
-                where member like '$owner|%'
-                group by member
-                order by max_points DESC
-            ) as top
-            on top.member = adaptive.member and top.max_points = adaptive.points
-            where points >= 0
-            order by points desc
+                     select split_part(json_array_elements(members)::text, '\"', 2) as member,
+                            points
+                     from battles
+                     where points_version = $points_version
+                     order by points DESC
+                 ) as inner_top
+            where member like '$owner|%'
+            and points > 0
+            group by member
+            order by max_points DESC
+
             limit $limit
         ") ?? [];
 
