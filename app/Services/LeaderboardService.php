@@ -14,6 +14,7 @@ class LeaderboardService
         $members_max_score = $this->getMemberMaxScore($owner, $points_version, $limit);
 
         $result = [];
+        $ids = [];
 
         foreach ($members_max_score as $row) {
             $battle = Battle::query()
@@ -23,13 +24,21 @@ class LeaderboardService
                 ->first();
 
             if ($battle instanceof Battle) {
+                $member = Member::fromString($row['member']);
                 $result []= [
                     'battle_id' => $battle->id,
                     'updated_at' => $battle->updated_at,
-                    'member' => Member::fromString($row['member'])->toArray(),
+                    'member' => $member->toArray(),
                     'points' => $row['max_points']
                 ];
+                $ids []= $member->getOwnerId();
             }
+        }
+
+        $users = VKApiService::getUsers($ids);
+
+        foreach ($result as &$res_row) {
+            $res_row['member']['user'] = $users[$res_row['member']['owner_id']];
         }
 
         return $result;

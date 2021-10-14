@@ -9,16 +9,14 @@ use App\Battle\Member;
 use App\Services\ConfigService;
 use App\Services\FightLog;
 use App\Services\LeaderboardService;
+use App\Services\VKApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\Battle as BattleModel;
 
 class BattleController extends Controller
 {
     public function dev() {
-        $battle = Battle::load(1);
-        dd($battle);
     }
 
     public function create(Request $request) {
