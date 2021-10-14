@@ -18,16 +18,16 @@ class LeaderboardService
         foreach ($members_max_score as $row) {
             $battle = Battle::query()
                 ->whereJsonContains('members', $row['member'])
-                ->where('points', $row['points'])
+                ->where('points', $row['max_points'])
                 ->where('points_version', $points_version)
                 ->first();
-            
+
             if ($battle instanceof Battle) {
                 $result []= [
                     'battle_id' => $battle->id,
                     'updated_at' => $battle->updated_at,
                     'member' => Member::fromString($row['member'])->toArray(),
-                    'points' => $row['points']
+                    'points' => $row['max_points']
                 ];
             }
         }
@@ -47,7 +47,7 @@ class LeaderboardService
                      order by points DESC
                  ) as inner_top
             where member like '$owner|%'
-            and points > 0
+                and points > 0
             group by member
             order by max_points DESC
 
@@ -56,7 +56,6 @@ class LeaderboardService
 
         foreach ($rows as &$row) {
             $row = (array)$row;
-            $row['member'] = Member::fromString($row['member'])->toArray();
         }
 
         return $rows;
