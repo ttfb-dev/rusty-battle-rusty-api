@@ -9,6 +9,14 @@ use App\Battle\Member;
 
 class LeaderboardService
 {
+    /** @var S3Service */
+    private $s3;
+
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3 = $s3Service;
+    }
+
     public function getLeaderBoard(string $owner, int $limit = 25): array {
         $points_version = ConfigService::getPoints('version', 1);
         $members_max_score = $this->getMemberMaxScore($owner, $points_version, $limit);
@@ -39,6 +47,7 @@ class LeaderboardService
 
         foreach ($result as &$res_row) {
             $res_row['member']['user'] = $users[$res_row['member']['owner_id']];
+            $res_row['member']['avatar'] = $this->s3->getOrCreate(md5($res_row['member']['user']['id']));
         }
 
         return $result;

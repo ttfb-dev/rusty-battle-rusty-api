@@ -48,4 +48,8 @@ class S3Service
     public function getImagePath(string $file_name): string {
         return $this->getBucketObject($file_name)['@metadata']['effectiveUri'] ?? '';
     }
+
+    public function getOrCreate(string $file_name): string {
+        return $this->checkFileExists($file_name) ? $this->getImagePath($file_name) : $this->initFile($file_name);
+    }
 }
