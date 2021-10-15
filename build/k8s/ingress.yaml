@@ -12,7 +12,26 @@ spec:
     - host: api.rusty-battle.ru
       http:
         paths:
-          - path: /
+          - path: /avatar/
+            backend:
+              serviceName: K8S_PROJECT_NAME-nginx
+              servicePort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: K8S_PROJECT_NAME-robots
+  namespace: K8S_NAMESPACE
+spec:
+  tls:
+    - hosts:
+        - api.robots-game.ru
+      secretName: robots-tls-secret
+  rules:
+    - host: api.robots-game.ru
+      http:
+        paths:
+          - path: /avatar/
             backend:
               serviceName: K8S_PROJECT_NAME-nginx
               servicePort: 80
